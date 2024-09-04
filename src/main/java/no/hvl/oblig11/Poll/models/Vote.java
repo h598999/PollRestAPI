@@ -14,13 +14,6 @@ public class Vote {
   private Instant publishedAt;
   private VoteOption voteOption;
 
-  public Vote(User caster, Instant publishedAt, VoteOption voteOption){
-    this.id = generateId();
-    this.caster = caster;
-    this.publishedAt = publishedAt;
-    this.voteOption = voteOption;
-  }
-
   public Vote(User caster, VoteOption voteOption){
     this.id = generateId();
     this.caster = caster;
@@ -28,9 +21,7 @@ public class Vote {
     this.voteOption = voteOption;
   }
   private synchronized int generateId(){
-    int id = idCounter;
-    idCounter++;
-    return id;
+    return idCounter++;
   }
 
   public static int getIdCounter() {

@@ -10,19 +10,25 @@ public class VoteOption {
   private int id;
   private String caption;
   private int presentationOrder;
-  private Poll poll;
+  private int numOfVotes;
 
-  public VoteOption(String caption, int presentationOrder, Poll poll){
+  public VoteOption(String caption, int presentationOrder){
     this.id = generateId();
     this.caption = caption;
     this.presentationOrder = presentationOrder;
-    this.poll = poll;
+    this.numOfVotes = 0;
   }
 
   private synchronized int generateId(){
-    int id = idCounter;
-    idCounter++;
-    return id;
+    return idCounter++;
+  }
+
+  public synchronized void castVote(){
+    numOfVotes++;
+  }
+
+  public synchronized void removeVote(){
+    numOfVotes--;
   }
 
   public static int getIdCounter() {
@@ -57,12 +63,14 @@ public class VoteOption {
     this.presentationOrder = presentationOrder;
   }
 
-  public Poll getPoll() {
-    return poll;
+  public int getNumOfVotes() {
+    return numOfVotes;
   }
 
-  public void setPoll(Poll poll) {
-    this.poll = poll;
+  public void setNumOfVotes(int numOfVotes) {
+    this.numOfVotes = numOfVotes;
   }
+
+
 }
 

@@ -1,13 +1,13 @@
 package no.hvl.oblig11.Poll.Domains;
 
 import java.util.HashMap;
+import java.util.List;
 
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
 import no.hvl.oblig11.Poll.models.Poll;
 import no.hvl.oblig11.Poll.models.User;
+import no.hvl.oblig11.Poll.models.Vote;
 
 /**
  * DomainManager
@@ -24,9 +24,11 @@ public class DomainManager {
   }
 
   public User addUser(User user){
-    User created = new User(user.getUsername(), user.getEmail());
-    users.put(created.getId(), created);
-    return users.get(created.getId());
+    if (users.containsValue(user)){
+      return null;
+    }
+    users.put(user.getId(), user);
+    return users.get(user.getId());
   }
 
   public User removeUser(int id){
@@ -35,21 +37,55 @@ public class DomainManager {
   }
 
   public Poll addPoll(Poll poll){
-    Poll created = new Poll(poll.getQuestion(), poll.getCreator(), poll.getVoteOptions());
-    polls.put(created.getId(), created);
-    return polls.get(created.getId());
+    User creator = users.get(poll.getCreator().getId());
+    if (creator == null){
+      return null;
+    }
+    creator.getCreatedPolls().add(poll);
+    polls.put(poll.getId(), poll);
+    return polls.get(poll.getId());
   }
 
   public Poll removePoll(int id){
     Poll deleted = polls.remove(id);
+    if (deleted != null){
+      deleted.getCreator().getCreatedPolls().remove(deleted);
+    }
     return deleted;
   }
 
   public User updateUser(int userid, User newUser){
     User updated = users.get(userid);
+    if (updated == null){
+      return null;
+    }
     updated.setEmail(newUser.getEmail());
     updated.setUsername(newUser.getUsername());
     return updated;
+  }
+
+  public User updateCastedVotesForUser(int userid, List<Vote> votes){
+    User updated = users.get(userid);
+    if (updated == null){
+      return null;
+    }
+    updated.setCastedVotes(votes);
+    return updated;
+  }
+
+  public Vote castVote(Vote vote){
+    Vote casted = new Vote(vote.getCaster(), vote.getVoteOption());
+    casted.getCaster().getCastedVotes().add(casted);
+    vote.getVoteOption().castVote();
+    return casted;
+  }
+
+  public Vote removeVote(Vote vote){
+    if (!getUsers().get(vote.getCaster().getId()).getCastedVotes().remove(vote)){
+      return null;
+    }
+    vote.getVoteOption().removeVote();
+    return vote;
   }
 
   public HashMap<Integer, Poll> getPolls() {

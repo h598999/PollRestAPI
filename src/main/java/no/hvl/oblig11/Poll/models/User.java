@@ -2,6 +2,7 @@ package no.hvl.oblig11.Poll.models;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * User
@@ -16,6 +17,11 @@ public class User {
   private List<Vote> castedVotes;
   private List<Poll> createdPolls;
 
+  public User(){
+    this.createdPolls = new ArrayList<>();
+    this.castedVotes = new ArrayList<>();
+  }
+
   public User(String username, String email){
     this.id = generateId();
     this.username = username;
@@ -25,9 +31,7 @@ public class User {
   }
 
   private int generateId(){
-    int id = idCounter;
-    idCounter++;
-    return id;
+    return idCounter++;
   }
 
   public static int getIdCounter() {
@@ -76,5 +80,22 @@ public class User {
 
   public void setCreatedPolls(List<Poll> createdPolls) {
     this.createdPolls = createdPolls;
+  }
+
+  @Override
+  public String toString(){
+    return "ID: " + this.id + " Username: " + this.username + " Email: " + this.email + " Votes: " + this.getCastedVotes() + " Polls: " + this.getCreatedPolls();
+  }
+
+  @Override
+  public boolean equals(Object obj){
+    if (this == obj){
+      return true;
+    }
+    if (obj == null | getClass() != obj.getClass()){
+      return false;
+    }
+    User user = (User)obj;
+    return Objects.equals(this.username, user.username) && Objects.equals(this.email, user.email);
   }
 }

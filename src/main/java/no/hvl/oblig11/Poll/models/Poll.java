@@ -3,6 +3,8 @@ package no.hvl.oblig11.Poll.models;
 import java.time.Instant;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Poll
  */
@@ -14,8 +16,15 @@ public class Poll {
   private String question;
   private Instant publishedAt;
   private Instant validUntil;
+  @JsonIgnore
   private User creator;
   private List<VoteOption> voteOptions;
+
+  public Poll(){
+    this.id = generateId();
+    this.publishedAt = Instant.now();
+    this.validUntil = Instant.MAX;
+  }
 
   public Poll(String question, User creator, List<VoteOption> voteOptions){
     this.id = generateId();
@@ -26,10 +35,16 @@ public class Poll {
     this.voteOptions = voteOptions;
   }
 
+  public Poll(String question, List<VoteOption> voteOptions){
+    this.id = generateId();
+    this.question = question;
+    this.publishedAt = Instant.now();
+    this.validUntil = Instant.MAX;
+    this.voteOptions = voteOptions;
+  }
+
   private synchronized int generateId(){
-    int id = idCounter;
-    idCounter++;
-    return id;
+    return idCounter++;
   }
 
   public int getId() {
@@ -78,5 +93,18 @@ public class Poll {
 
   public void setVoteOptions(List<VoteOption> voteOptions) {
     this.voteOptions = voteOptions;
+  }
+
+  public static int getIdCounter() {
+    return idCounter;
+  }
+
+  public static void setIdCounter(int idCounter) {
+    Poll.idCounter = idCounter;
+  }
+
+  @Override
+  public String toString(){
+    return "ID: " + id + " CREATOR: " + creator;
   }
 }
