@@ -17,15 +17,6 @@ public class Poll {
   private User creator;
   private List<VoteOption> voteOptions;
 
-  public Poll(String question, Instant publishedAt, Instant validUntil, User creator, List<VoteOption> voteOptions){
-    this.id = generateId();
-    this.question = question;
-    this.publishedAt = publishedAt;
-    this.validUntil = validUntil;
-    this.creator = creator;
-    this.voteOptions = voteOptions;
-  }
-
   public Poll(String question, User creator, List<VoteOption> voteOptions){
     this.id = generateId();
     this.question = question;

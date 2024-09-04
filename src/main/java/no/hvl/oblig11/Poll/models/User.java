@@ -16,14 +16,6 @@ public class User {
   private List<Vote> castedVotes;
   private List<Poll> createdPolls;
 
-  public User(String username, String email, List<Vote> castedVotes, List<Poll> createdPolls){
-    this.id = generateId();
-    this.username = username;
-    this.email = email;
-    this.createdPolls = createdPolls;
-    this.castedVotes = castedVotes;
-  }
-
   public User(String username, String email){
     this.id = generateId();
     this.username = username;
