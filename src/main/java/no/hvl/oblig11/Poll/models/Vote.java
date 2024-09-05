@@ -14,6 +14,14 @@ public class Vote {
   private Instant publishedAt;
   private VoteOption voteOption;
 
+  public Vote(){}
+
+  public Vote(VoteOption voteOption){
+    this.id = generateId();
+    this.publishedAt = Instant.now();
+    this.voteOption = voteOption;
+  }
+
   public Vote(User caster, VoteOption voteOption){
     this.id = generateId();
     this.caster = caster;
