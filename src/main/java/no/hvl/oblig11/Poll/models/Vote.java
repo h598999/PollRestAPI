@@ -78,4 +78,27 @@ public class Vote {
   public void setVoteOption(VoteOption voteOption) {
     this.voteOption = voteOption;
   }
+
+  @Override
+  public String toString(){
+    return this.getCaster().getUsername() + " " + this.getVoteOption().getCaption();
+  }
+  @Override
+  public boolean equals(Object obj){
+    // Check if the object is compared with itself
+    if (this == obj) {
+      return true;
+    }
+    // Check if the object is of the same type
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+    // Cast the object to a Vote
+    Vote other = (Vote) obj;
+    // Compare id, caster, publishedAt, and voteOption
+    return this.id == other.id &&
+      (this.caster == null ? other.caster == null : this.caster.equals(other.caster)) &&
+      (this.publishedAt == null ? other.publishedAt == null : this.publishedAt.equals(other.publishedAt)) &&
+      (this.voteOption == null ? other.voteOption == null : this.voteOption.equals(other.voteOption));
+  }
 }

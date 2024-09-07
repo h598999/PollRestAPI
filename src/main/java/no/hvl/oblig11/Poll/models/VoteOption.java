@@ -70,6 +70,30 @@ public class VoteOption {
   public void setNumOfVotes(int numOfVotes) {
     this.numOfVotes = numOfVotes;
   }
+  
+  @Override
+  public String toString(){
+    return "Caption: " + this.getCaption() + " id: " + this.getId();
+  }
+
+  @Override
+  public boolean equals(Object obj) {
+    // Check if the object is compared with itself
+    if (this == obj) {
+      return true;
+    }
+
+    // Check if the object is of the same type
+    if (obj == null || getClass() != obj.getClass()) {
+      return false;
+    }
+
+    // Cast the object to VoteOption
+    VoteOption other = (VoteOption) obj;
+
+    // Compare id (assuming id is the unique identifier)
+    return this.id == other.id;
+  }
 
 
 }

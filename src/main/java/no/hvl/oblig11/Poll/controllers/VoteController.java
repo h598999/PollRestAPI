@@ -2,6 +2,7 @@ package no.hvl.oblig11.Poll.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -9,10 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 
+import jakarta.websocket.server.PathParam;
 import no.hvl.oblig11.Poll.Domains.DomainManager;
 import no.hvl.oblig11.Poll.Exceptions.Message;
 import no.hvl.oblig11.Poll.models.User;
@@ -53,5 +57,18 @@ public class VoteController {
       // manager.castVote(vote);
       vote = manager.castVote(vote);
       return new ResponseEntity<>(vote, HttpStatus.OK);
+  }
+
+  @PutMapping("/votes/{id}")
+  public ResponseEntity<Object> updateVote(@PathVariable("id") int id, @RequestBody Vote vote){
+    Vote old = manager.getUsers().values().stream()
+      .flatMap(v -> v.getCastedVotes().stream())
+      .filter(v -> v.getId() == v.getId())
+      .findFirst()
+      .orElseThrow(() -> new NoSuchElementException("Not found"));
+    old.getVoteOption().removeVote();
+    vote.getVoteOption().castVote();
+    old.setVoteOption(vote.getVoteOption());
+    return new ResponseEntity<>(old, HttpStatus.OK);
   }
 }

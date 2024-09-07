@@ -3,21 +3,25 @@ package no.hvl.oblig11.Poll.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import no.hvl.oblig11.Poll.Domains.DomainManager;
 import no.hvl.oblig11.Poll.Exceptions.Message;
 import no.hvl.oblig11.Poll.models.Poll;
 import no.hvl.oblig11.Poll.models.User;
+import no.hvl.oblig11.Poll.models.Vote;
 import no.hvl.oblig11.Poll.models.VoteOption;
 
 /**
@@ -55,5 +59,34 @@ public class PollController {
       return new ResponseEntity<>(new Message("User not found"), HttpStatus.NOT_FOUND);
     }
     return new ResponseEntity<>(added, HttpStatus.OK);
+  }
+
+  @DeleteMapping("/Polls/{id}")
+  public ResponseEntity<Object> deletePollById(@PathVariable("id") int id){
+    Poll deleted = manager.getPolls().get(id);
+    if (deleted == null){
+      return new ResponseEntity<>(new Message("No such poll exists"), HttpStatus.NOT_FOUND);
+    }
+    // Get all the voteoptions
+    List<VoteOption> options = deleted.getVoteOptions();
+    System.out.println("Options: " + options.toString());
+    // Find all the votes containing those options
+    List<Vote> votes = new ArrayList<>();
+      manager.getUsers().values().stream()
+        .flatMap(u -> u.getCastedVotes().stream())
+        .filter(v -> options.contains(v.getVoteOption()))
+        .forEach(v -> votes.add(v));
+      System.out.println("Votes: " + votes.toString());
+    // Remove those votes
+    votes.forEach(v -> {
+      manager.getUsers().values().stream().forEach(u -> {
+        if (u.getCastedVotes().contains(v)){
+          System.out.println(v.toString());
+          u.getCastedVotes().remove(v);
+        }
+      });
+    });
+    manager.getPolls().remove(id);
+    return new ResponseEntity<>(deleted, HttpStatus.OK);
   }
 }
