@@ -49,7 +49,7 @@ public class UserController {
     if ( users == null || users.size() == 0){
       return new ResponseEntity<>(new Message("No users"), HttpStatus.NOT_FOUND);
     }
-    return new ResponseEntity<>(users, HttpStatus.OK);
+    return new ResponseEntity<>(List.copyOf(users.values()), HttpStatus.OK);
   }
 
   @PostMapping("/users")

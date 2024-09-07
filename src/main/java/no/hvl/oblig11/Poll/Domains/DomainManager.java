@@ -43,8 +43,12 @@ public class DomainManager {
     if (creator == null){
       return null;
     }
+    System.out.println(creator.toString());
     creator.getCreatedPolls().add(poll);
+    System.out.println("Created polls: " + creator.getCreatedPolls());
     polls.put(poll.getId(), poll);
+    System.out.println(poll.getId());
+    System.out.println(poll.getCreator());
     return polls.get(poll.getId());
   }
 

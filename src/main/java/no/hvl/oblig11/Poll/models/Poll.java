@@ -2,6 +2,7 @@ package no.hvl.oblig11.Poll.models;
 
 import java.time.Instant;
 import java.util.List;
+import java.util.Objects;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -32,6 +33,14 @@ public class Poll {
     this.publishedAt = Instant.now();
     this.validUntil = Instant.MAX;
     this.creator = creator;
+    this.voteOptions = voteOptions;
+  }
+
+  public Poll(String question, List<VoteOption> voteOptions){
+    this.id = generateId();
+    this.question = question;
+    this.publishedAt = Instant.now();
+    this.validUntil = Instant.MAX;
     this.voteOptions = voteOptions;
   }
 
@@ -97,6 +106,23 @@ public class Poll {
 
   @Override
   public String toString(){
-    return "ID: " + id + " CREATOR: " + creator;
+    return "ID: " + id + " CREATOR: " + creator.getUsername() + " GET question: " + getQuestion() + " VoteOptions: " + getVoteOptions();
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true; // Check for reference equality
+    if (o == null || getClass() != o.getClass()) return false; // Check for null or different class
+
+    Poll poll = (Poll) o;
+
+    // Check if all relevant fields are equal
+    return id == poll.id &&
+      Objects.equals(question, poll.question) &&
+      Objects.equals(publishedAt, poll.publishedAt) &&
+      Objects.equals(validUntil, poll.validUntil) &&
+      Objects.equals(creator, poll.creator) &&
+      Objects.equals(voteOptions, poll.voteOptions);
+  }
+  
 }

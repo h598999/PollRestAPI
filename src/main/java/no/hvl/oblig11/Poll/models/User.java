@@ -84,7 +84,7 @@ public class User {
 
   @Override
   public String toString(){
-    return "ID: " + this.id + " Username: " + this.username + " Email: " + this.email + " Votes: " + this.getCastedVotes() + " Polls: " + this.getCreatedPolls();
+    return "ID: " + this.id + " Username: " + this.username + " Email: " + this.email + " Votes: " + this.getCastedVotes() + " Polls: "; 
   }
 
   @Override
