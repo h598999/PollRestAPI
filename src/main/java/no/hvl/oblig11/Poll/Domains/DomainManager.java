@@ -2,12 +2,14 @@ package no.hvl.oblig11.Poll.Domains;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.stereotype.Component;
 
 import no.hvl.oblig11.Poll.models.Poll;
 import no.hvl.oblig11.Poll.models.User;
 import no.hvl.oblig11.Poll.models.Vote;
+import no.hvl.oblig11.Poll.models.VoteOption;
 
 /**
  * DomainManager
@@ -75,8 +77,17 @@ public class DomainManager {
 
   public Vote castVote(Vote vote){
     Vote casted = new Vote(vote.getCaster(), vote.getVoteOption());
+    if (casted.getCaster() == null || casted.getVoteOption() == null){
+      return null;
+    }
+    VoteOption option = isFound(vote.getVoteOption());
+    if (option == null){
+      return null;
+    }
+    option.castVote();
+    casted.setVoteOption(option);
+    System.out.println(option);
     casted.getCaster().getCastedVotes().add(casted);
-    vote.getVoteOption().castVote();
     return casted;
   }
 
@@ -90,6 +101,14 @@ public class DomainManager {
 
   public HashMap<Integer, Poll> getPolls() {
     return polls;
+  }
+
+  public VoteOption isFound(VoteOption voteOption){
+    return getPolls().values().stream()
+      .flatMap(p -> p.getVoteOptions().stream())
+      .filter(v -> v.getId() == voteOption.getId())
+      .findAny()
+      .orElseThrow(() -> new NoSuchElementException("Vote option not found"));
   }
 
   public void setPolls(HashMap<Integer, Poll> polls) {

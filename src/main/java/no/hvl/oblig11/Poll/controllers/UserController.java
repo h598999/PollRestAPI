@@ -54,7 +54,7 @@ public class UserController {
 
   @PostMapping("/users")
   public ResponseEntity<Object> addUser(@RequestBody User user){
-    User created = manager.addUser(user);
+    User created = manager.addUser(new User(user.getUsername(), user.getEmail()));
     if (created == null){
       return new ResponseEntity<>(new Message("Could not add user"), HttpStatus.BAD_REQUEST);
     }
@@ -63,6 +63,6 @@ public class UserController {
       .buildAndExpand(created.getId())
       .toUri();
 
-    return ResponseEntity.created(location).body(user);
+    return ResponseEntity.created(location).body(created);
   }
 }

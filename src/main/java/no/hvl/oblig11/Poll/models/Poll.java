@@ -35,14 +35,6 @@ public class Poll {
     this.voteOptions = voteOptions;
   }
 
-  public Poll(String question, List<VoteOption> voteOptions){
-    this.id = generateId();
-    this.question = question;
-    this.publishedAt = Instant.now();
-    this.validUntil = Instant.MAX;
-    this.voteOptions = voteOptions;
-  }
-
   private synchronized int generateId(){
     return idCounter++;
   }

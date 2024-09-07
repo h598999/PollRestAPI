@@ -2,6 +2,8 @@ package no.hvl.oblig11.Poll.models;
 
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Vote
  */
@@ -10,6 +12,7 @@ public class Vote {
   private static int idCounter = 0;
   
   private int id;
+  @JsonIgnore
   private User caster;
   private Instant publishedAt;
   private VoteOption voteOption;
@@ -17,16 +20,20 @@ public class Vote {
   public Vote(){}
 
   public Vote(VoteOption voteOption){
-    this.id = generateId();
-    this.publishedAt = Instant.now();
     this.voteOption = voteOption;
   }
 
   public Vote(User caster, VoteOption voteOption){
     this.id = generateId();
     this.caster = caster;
-    this.publishedAt = Instant.now();
     this.voteOption = voteOption;
+    this.publishedAt = Instant.now();
+  }
+
+  public Vote(User caster){
+    this.id = generateId();
+    this.caster = caster;
+    this.publishedAt = Instant.now();
   }
   private synchronized int generateId(){
     return idCounter++;
