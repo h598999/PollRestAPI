@@ -30,6 +30,22 @@ public class User {
     this.castedVotes = new ArrayList<>();
   }
 
+  public Poll createPoll(Poll poll){
+    boolean added = this.getCreatedPolls().add(poll);
+    if (!added){
+      return null;
+    }
+    return this.createdPolls.getLast();
+  }
+
+  public Vote castVote(Vote vote){
+    boolean voted = this.getCastedVotes().add(vote);
+    if (!voted){
+      return null;
+    }
+    return this.getCastedVotes().getLast();
+  }
+
   private int generateId(){
     return idCounter++;
   }

@@ -38,18 +38,14 @@ public class DomainManager {
     return deleted;
   }
 
-  public Poll addPoll(Poll poll){
-    User creator = users.get(poll.getCreator().getId());
+  public Poll addPoll(User user, Poll poll){
+    User creator = users.get(user.getId());
     if (creator == null){
       return null;
     }
-    System.out.println(creator.toString());
-    creator.getCreatedPolls().add(poll);
-    System.out.println("Created polls: " + creator.getCreatedPolls());
-    polls.put(poll.getId(), poll);
-    System.out.println(poll.getId());
-    System.out.println(poll.getCreator());
-    return polls.get(poll.getId());
+    Poll npoll = new Poll(poll.getQuestion(), creator);
+    poll.
+    Poll created = creator.createPoll(poll);
   }
 
   public Poll removePoll(int id){
