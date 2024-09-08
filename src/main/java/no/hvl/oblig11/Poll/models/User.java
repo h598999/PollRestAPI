@@ -25,6 +25,7 @@ public class User {
   }
 
   public boolean createPoll(Poll poll){
+    poll.setCreator(this);
     if (createdPolls.contains(poll)){
       return false;
     }

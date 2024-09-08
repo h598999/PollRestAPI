@@ -8,6 +8,8 @@ import java.time.Instant;
 public class Vote {
 
   private int id;
+  private User caster;
+
   private Instant publishedAt;
   private VoteOption selected;
 
@@ -38,5 +40,13 @@ public class Vote {
 
   public void setSelected(VoteOption selected) {
     this.selected = selected;
+  }
+
+  public User getCaster() {
+    return caster;
+  }
+
+  public void setCaster(User caster) {
+    this.caster = caster;
   }
 }

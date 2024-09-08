@@ -7,10 +7,14 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Poll{
 
   private int id;
   private String question;
+  @JsonIgnore
+  private User creator;
   private Instant publishedAt;
   private Instant validUntil;
   private List<VoteOption> voteOptions;
@@ -31,6 +35,14 @@ public class Poll{
 
   public String getQuestion() {
     return question;
+  }
+
+  public User getCreator() {
+    return creator;
+  }
+
+  public void setCreator(User creator) {
+    this.creator = creator;
   }
 
   public void setQuestion(String question) {
