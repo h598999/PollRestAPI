@@ -4,7 +4,6 @@ package no.hvl.oblig11.Poll.models;
  */
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -19,9 +18,9 @@ public class Poll{
   private Instant validUntil;
   private List<VoteOption> voteOptions;
 
-  public Poll(String question){
+  public Poll(String question, List<VoteOption> voteOptions){
     this.question = question;
-    this.voteOptions = new ArrayList<>();
+    this.voteOptions = voteOptions;
     this.validUntil = Instant.MAX;
     this.publishedAt = Instant.now();
   }
@@ -80,4 +79,29 @@ public class Poll{
   public void setId(int id) {
     this.id = id;
   }
+
+  @Override
+  public String toString() {
+    return "Poll{" +
+      "id=" + id +
+      ", question='" + question + '\'' +
+      ", creator=" + (creator != null ? creator.getUsername() : "null") +
+      ", publishedAt=" + publishedAt +
+      ", validUntil=" + validUntil +
+      ", voteOptions=" + voteOptions +
+      '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Poll poll = (Poll) o;
+
+    if (id != poll.id) return false;
+    if (!question.equals(poll.question)) return false;
+    return creator != null ? creator.equals(poll.creator) : poll.creator == null;
+  }
+
 }

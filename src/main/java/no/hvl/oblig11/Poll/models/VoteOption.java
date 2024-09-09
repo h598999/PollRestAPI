@@ -40,4 +40,25 @@ public class VoteOption {
   public void setValidUntil(Instant validUntil) {
     this.validUntil = validUntil;
   }
+
+  @Override
+  public String toString() {
+    return "VoteOption{" +
+      "id=" + id +
+      ", caption='" + caption + '\'' +
+      ", validUntil=" + validUntil +
+      '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    VoteOption that = (VoteOption) o;
+
+    if (id != that.id) return false;
+    if (!caption.equals(that.caption)) return false;
+    return validUntil.equals(that.validUntil);
+  }
 }

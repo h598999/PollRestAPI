@@ -78,4 +78,28 @@ public class User {
   public void setCreatedPolls(List<Poll> createdPolls) {
     this.createdPolls = createdPolls;
   }
+
+  @Override
+  public String toString() {
+    return "User{" +
+      "id=" + id +
+      ", username='" + username + '\'' +
+      ", email='" + email + '\'' +
+      ", votes=" + votes +
+      ", createdPolls=" + createdPolls +
+      '}';
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    User user = (User) o;
+
+    if (id != user.id) return false;
+    if (!username.equals(user.username)) return false;
+    return email.equals(user.email);
+  }
+
 }
