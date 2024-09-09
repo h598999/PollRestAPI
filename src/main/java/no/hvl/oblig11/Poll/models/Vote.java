@@ -2,16 +2,21 @@ package no.hvl.oblig11.Poll.models;
 
 import java.time.Instant;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 /**
  * Vote
  */
 public class Vote {
 
   private int id;
+  @JsonIgnore
   private User caster;
 
   private Instant publishedAt;
   private VoteOption selected;
+
+  public Vote(){}
 
   public Vote(VoteOption selected){
     this.selected = selected;

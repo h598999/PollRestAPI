@@ -174,7 +174,7 @@ public class DomainManagerTest {
     Vote vote = new Vote(o1);
     Vote castedVote = manager.createVote(addedUser.getId(), vote);
     assertTrue(addedUser.getVotes().contains(castedVote));
-    Vote deletedVote = manager.removeVote(castedVote);
+    Vote deletedVote = manager.removeVote(castedVote.getId());
     assertTrue(castedVote.equals(deletedVote));
     assertTrue(!addedUser.getVotes().contains(castedVote));
     assertTrue(addedUser.getVotes().isEmpty());

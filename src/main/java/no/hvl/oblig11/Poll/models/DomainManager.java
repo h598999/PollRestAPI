@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -60,6 +59,10 @@ public class DomainManager {
 
   public Poll getPollById(int id){
     return polls.get(id);
+  }
+
+  public List<Poll> getAllPolls(){
+    return new ArrayList<Poll>(polls.values());
   }
   
   public Poll updatePoll(int id, Poll newPoll){
@@ -131,28 +134,49 @@ public class DomainManager {
   public Vote createVote(int userid, Vote vote){
     User caster = users.get(userid);
     if (caster == null){
+      System.out.println("Caster is null");
       return null;
     }
-    Optional<Poll> poll = polls.values().stream().filter(p -> p.getVoteOptions().contains(vote.getSelected())).findAny();
+    Optional<VoteOption> poll = polls.values().stream().flatMap(u -> u.getVoteOptions().stream())
+      .filter(vo -> vo.getId() == vote.getSelected().getId())
+      .findAny();
     if (!poll.isPresent()){
+      System.out.println("Could not find voteOption");
       return null;
     }
     vote.setCaster(caster);
     vote.setId(votesid);
     votesid++;
+    vote.setPublishedAt(Instant.now());
     if (!caster.castVote(vote)){
+      System.out.println("Couldnot cast vote");
       return null;
     }
     return vote;
   }
 
-  public Vote removeVote(Vote vote){
+  public Vote removeVote(int id){
+    Optional<Vote> removedvotes = users.values().stream().flatMap(v -> v.getVotes().stream())
+      .filter(v -> v.getId() == id).findAny();
+
+    if (removedvotes.isEmpty()){
+      System.out.println("Could not find vote");
+      return null;
+    }
+    Vote vote = removedvotes.get();
+    // Optional<User> caster = removedvotes.forEach(removedVote -> users.values().stream()
+    //     .filter(u -> u.getVotes().contains(removedVote))
+    //     .findAny();
+    //
     Optional<User> caster = users.values().stream().filter(u -> u.getVotes().contains(vote)).findAny();
+    
     if (!caster.isPresent()){
+      System.out.println("Caster is null");
       return null;
     }
     User cr = caster.get();
     if (!cr.getVotes().remove(vote)){
+      System.out.println("Could not remove vote");
       return null;
     }
     return vote;
@@ -168,6 +192,13 @@ public class DomainManager {
       return null;
     }
     return found.get();
+  }
+
+  public List<Vote> getAllVotes(){
+    List<Vote> allVotes = new ArrayList<>();
+    users.values().stream().flatMap(u -> u.getVotes().stream())
+      .forEach(u -> allVotes.add(u));
+    return allVotes;
   }
 
   public Vote updateVote(int id, Vote updatedvote){
