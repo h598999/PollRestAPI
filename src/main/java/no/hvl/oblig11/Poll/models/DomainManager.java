@@ -1,9 +1,11 @@
 package no.hvl.oblig11.Poll.models;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
@@ -120,6 +122,10 @@ public class DomainManager {
 
   public User getUserById(int id){
     return this.users.get(id);
+  }
+
+  public List<User> getAllUsers(){
+    return new ArrayList<User>(users.values());
   }
 
   public Vote createVote(int userid, Vote vote){

@@ -1,9 +1,0 @@
-./POST-user.sh
-./POST-user2.sh
-./POST-poll.sh
-./POST-vote.sh
-./GET-allvotes.sh
-./PUT-vote.sh
-./GET-allvotes.sh
-./DELETE-poll.sh
-./GET-allvotes.sh
