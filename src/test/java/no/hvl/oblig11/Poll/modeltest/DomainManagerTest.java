@@ -151,7 +151,7 @@ public class DomainManagerTest {
     VoteOption o1 = new VoteOption("Vann", Instant.MAX);
     VoteOption o2 = new VoteOption("Melk", Instant.MAX);
     Poll poll = new Poll("Hva smaker best?", List.of(o1,o2));
-    Poll addedPoll = manager.addPoll(addedUser.getId(), poll);
+    manager.addPoll(addedUser.getId(), poll);
     Vote vote = new Vote(o1);
     Vote wrongVote = new Vote(new VoteOption("Brus", Instant.MAX));
     Vote castedVote = manager.createVote(addedUser.getId(), vote);
@@ -160,6 +160,40 @@ public class DomainManagerTest {
     assertTrue(castedVote.getSelected().equals(o1));
     assertTrue(notcastedVote == null);
     assertTrue(!addedUser.getVotes().contains(notcastedVote));
+  }
+
+  @Test
+  public void removeVote(){
+    User user = new User("Jonas", "Jonas@email.com");
+    User addedUser = manager.addUser(user);
+    VoteOption o1 = new VoteOption("Vann", Instant.MAX);
+    VoteOption o2 = new VoteOption("Melk", Instant.MAX);
+    Poll poll = new Poll("Hva smaker best?", List.of(o1,o2));
+    manager.addPoll(addedUser.getId(), poll);
+    Vote vote = new Vote(o1);
+    Vote castedVote = manager.createVote(addedUser.getId(), vote);
+    assertTrue(addedUser.getVotes().contains(castedVote));
+    Vote deletedVote = manager.removeVote(castedVote);
+    assertTrue(castedVote.equals(deletedVote));
+    assertTrue(!addedUser.getVotes().contains(castedVote));
+    assertTrue(addedUser.getVotes().isEmpty());
+  }
+
+  @Test
+  public void updateVote(){
+    User user = new User("Jonas", "Jonas@email.com");
+    User addedUser = manager.addUser(user);
+    VoteOption o1 = new VoteOption("Vann", Instant.MAX);
+    VoteOption o2 = new VoteOption("Melk", Instant.MAX);
+    Poll poll = new Poll("Hva smaker best?", List.of(o1,o2));
+    manager.addPoll(addedUser.getId(), poll);
+    Vote vote = new Vote(o1);
+    Vote castedVote = manager.createVote(addedUser.getId(), vote);
+    assertTrue(addedUser.getVotes().contains(castedVote));
+    Vote updatedVote = new Vote(o2);
+    updatedVote = manager.updateVote(castedVote.getId(), updatedVote);
+    assertTrue(addedUser.getVotes().contains(updatedVote));
+    assertTrue(addedUser.getVotes().size() == 1);
   }
 
 }

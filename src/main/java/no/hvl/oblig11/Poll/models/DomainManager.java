@@ -138,19 +138,54 @@ public class DomainManager {
   }
 
   public Vote removeVote(Vote vote){
-    return null;
+    Optional<User> caster = users.values().stream().filter(u -> u.getVotes().contains(vote)).findAny();
+    if (!caster.isPresent()){
+      return null;
+    }
+    User cr = caster.get();
+    if (!cr.getVotes().remove(vote)){
+      return null;
+    }
+    return vote;
   }
 
-  public Vote getVoteById(){
-    return null;
+  public Vote getVoteById(int id){
+    Optional<Vote> found = users.values().stream()
+      .flatMap(u -> u.getVotes().stream())
+      .filter(v -> v.getId() == id)
+      .findFirst();
+
+    if (!found.isPresent()){
+      return null;
+    }
+    return found.get();
   }
 
-  public Vote updateVote(){
-    return null;
+  public Vote updateVote(int id, Vote updatedvote){
+    Optional<Vote> found = users.values().stream()
+      .flatMap(u -> u.getVotes().stream())
+      .filter(v -> v.getId() == id)
+      .findFirst();
+    if (!found.isPresent()){
+      return null;
+    }
+    Vote vote = found.get();
+    vote.setSelected(updatedvote.getSelected());
+    vote.setPublishedAt(Instant.now());
+    return vote;
   }
 
-  public VoteOption createVoteOption(){
-    return null;
+  public VoteOption createVoteOption(int id, VoteOption option){
+    Poll poll = polls.get(id);
+    if (poll == null){
+      return null;
+    }
+    if (!poll.addVoteOption(option)){
+      return null;
+    }
+    option.setId(voteoptionsid);
+    voteoptionsid++;
+    return option;
   }
 
   public VoteOption removeVoteOption(){

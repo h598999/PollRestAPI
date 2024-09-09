@@ -49,4 +49,27 @@ public class Vote {
   public void setCaster(User caster) {
     this.caster = caster;
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+
+    Vote vote = (Vote) o;
+
+    if (id != vote.id) return false;
+    if (caster != null ? !caster.equals(vote.caster) : vote.caster != null) return false;
+    if (publishedAt != null ? !publishedAt.equals(vote.publishedAt) : vote.publishedAt != null) return false;
+    return selected != null ? selected.equals(vote.selected) : vote.selected == null;
+  }
+
+  @Override
+  public String toString() {
+    return "Vote{" +
+      "id=" + id +
+      // ", caster=" + caster +
+      ", publishedAt=" + publishedAt +
+      ", selected=" + selected +
+      '}';
+  }
 }
