@@ -71,5 +71,4 @@ public class PollController {
     }
     return new ResponseEntity<>(deleted, HttpStatus.OK);
   }
-  
 }

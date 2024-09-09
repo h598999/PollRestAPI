@@ -53,6 +53,20 @@ public class DomainManager {
     if (removed == null){
       return removed;
     }
+
+    List<Integer> voteOptions = new ArrayList<>();
+
+    removed.getVoteOptions().forEach(vo -> {
+      voteOptions.add(vo.getId());
+    });
+
+    List<Vote> removedvotes = users.values().stream().flatMap(v -> v.getVotes().stream())
+      .filter(v -> voteOptions.contains(v.getId())).toList();
+
+    removedvotes.forEach(removedVote -> users.values().stream()
+        .filter(u -> u.getVotes().contains(removedVote))
+        .forEach(u -> u.getVotes().remove(removedVote))
+        );
     removed.getCreator().getCreatedPolls().remove(removed);
     return removed;
   }
@@ -138,7 +152,7 @@ public class DomainManager {
       return null;
     }
     Optional<VoteOption> poll = polls.values().stream().flatMap(u -> u.getVoteOptions().stream())
-      .filter(vo -> vo.getId() == vote.getSelected().getId())
+      .filter(vo -> vo.getId() == vote.getSelected().getId() && vo.getCaption().equals(vote.getSelected().getCaption()))
       .findAny();
     if (!poll.isPresent()){
       System.out.println("Could not find voteOption");
