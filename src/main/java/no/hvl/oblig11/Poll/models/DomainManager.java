@@ -242,15 +242,19 @@ public class DomainManager {
     return option;
   }
 
-  public VoteOption removeVoteOption(int pollid, int voteOptionId){
-    Poll poll = polls.get(pollid);
-    if (poll == null ){
-      return null;
-    }
-    Optional<VoteOption> removed = poll.getVoteOptions().stream().filter(v -> v.getId() == voteOptionId).findAny();
+  public VoteOption removeVoteOption(int voteOptionId){
+    Optional<VoteOption> removed = polls.values().stream()
+      .flatMap(p -> p.getVoteOptions().stream())
+      .filter(vo -> vo.getId() == voteOptionId)
+      .findAny();
     if (!removed.isPresent()){
       return null;
     }
+    Optional<Poll> oppoll = polls.values().stream().filter(p -> p.getVoteOptions().contains(removed.get())).findAny();
+    if (oppoll.isEmpty()){
+      return null;
+    }
+    Poll poll = oppoll.get();
     VoteOption deleted = poll.getVoteOptions().remove(voteOptionId);
     if (deleted == null){
       return null;
@@ -274,6 +278,12 @@ public class DomainManager {
       return null;
     }
     return option.get();
+  }
+
+  public List<VoteOption> getAllVoteOptions(){
+    return polls.values().stream()
+      .flatMap(p -> p.getVoteOptions().stream())
+      .toList();
   }
 
   public VoteOption updateVoteOption(int voteOptionId, VoteOption newOption){

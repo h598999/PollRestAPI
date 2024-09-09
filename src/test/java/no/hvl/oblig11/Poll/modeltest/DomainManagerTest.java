@@ -248,7 +248,7 @@ public class DomainManagerTest {
     VoteOption add = new VoteOption("Brus", Instant.MAX);
     manager.createVoteOption(0, add);
 
-    VoteOption removed = manager.removeVoteOption(0, 0);
+    VoteOption removed = manager.removeVoteOption(0);
     // assertTrue(addedUser.getVotes().size() == 1 && addedUser.getVotes().contains(castedVote));
     assertTrue(manager.getPollById(0).getVoteOptions().size() == 2);
     assertTrue(!manager.getPollById(0).getVoteOptions().contains(o1));
