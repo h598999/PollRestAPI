@@ -4,6 +4,7 @@ package no.hvl.oblig11.Poll.models;
  */
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -20,7 +21,7 @@ public class Poll{
 
   public Poll(String question, List<VoteOption> voteOptions){
     this.question = question;
-    this.voteOptions = voteOptions;
+    this.voteOptions = new ArrayList<>(voteOptions);
     this.validUntil = Instant.MAX;
     this.publishedAt = Instant.now();
   }

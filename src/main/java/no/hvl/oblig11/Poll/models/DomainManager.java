@@ -2,6 +2,7 @@ package no.hvl.oblig11.Poll.models;
 
 import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Component;
@@ -30,11 +31,11 @@ public class DomainManager {
     if (!(poll.getVoteOptions().size() >= 2)){
       return null;
     }
+    poll.setId(this.pollsid);
     if (!creator.createPoll(poll)){
       return null;
     }
-    poll.setId(pollsid);
-    pollsid++;
+    this.pollsid++;
     poll.getVoteOptions().forEach(vo ->  {
       vo.setId(voteoptionsid);
       voteoptionsid++;
@@ -131,6 +132,8 @@ public class DomainManager {
       return null;
     }
     vote.setCaster(caster);
+    vote.setId(votesid);
+    votesid++;
     if (!caster.castVote(vote)){
       return null;
     }
@@ -188,16 +191,62 @@ public class DomainManager {
     return option;
   }
 
-  public VoteOption removeVoteOption(){
-    return null;
+  public VoteOption removeVoteOption(int pollid, int voteOptionId){
+    Poll poll = polls.get(pollid);
+    if (poll == null ){
+      return null;
+    }
+    Optional<VoteOption> removed = poll.getVoteOptions().stream().filter(v -> v.getId() == voteOptionId).findAny();
+    if (!removed.isPresent()){
+      return null;
+    }
+    VoteOption deleted = poll.getVoteOptions().remove(voteOptionId);
+    if (deleted == null){
+      return null;
+    }
+    List<Vote> removedvotes = users.values().stream().flatMap(v -> v.getVotes().stream())
+      .filter(v -> v.getSelected().getId() == voteOptionId).toList();
+
+    removedvotes.forEach(removedVote -> users.values().stream()
+        .filter(u -> u.getVotes().contains(removedVote))
+        .forEach(u -> u.getVotes().remove(removedVote))
+        );
+    return deleted;
   }
 
-  public VoteOption getVoteOptionById(){
-    return null;
+  public VoteOption getVoteOptionById(int voteopionid){
+    Optional<VoteOption> option = polls.values().stream().flatMap(p -> p.getVoteOptions().stream())
+      .filter(vo -> vo.getId() == voteopionid)
+      .findAny();
+
+    if (option.isEmpty()){
+      return null;
+    }
+    return option.get();
   }
 
-  public VoteOption updateVoteOption(){
-    return null;
+  public VoteOption updateVoteOption(int voteOptionId, VoteOption newOption){
+    Optional<VoteOption> option = polls.values().stream().flatMap(p -> p.getVoteOptions().stream())
+      .filter(vo -> vo.getId() == voteOptionId)
+      .findAny();
+    if (option.isEmpty()){
+      return null;
+    }
+    List<Vote> removedvotes = users.values().stream().flatMap(v -> v.getVotes().stream())
+      .filter(v -> v.getSelected().getId() == voteOptionId).toList();
+
+    removedvotes.forEach(removedVote -> users.values().stream()
+        .filter(u -> u.getVotes().contains(removedVote))
+        .forEach(u -> u.getVotes().remove(removedVote))
+        );
+
+    VoteOption updated = option.get();
+
+    updated.setCaption(newOption.getCaption());
+    updated.setValidUntil(newOption.getValidUntil());
+
+    return updated;
+
   }
   
   public HashMap<Integer, User> getUsers(){
