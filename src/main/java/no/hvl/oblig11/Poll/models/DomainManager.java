@@ -23,6 +23,16 @@ public class DomainManager {
 
   public DomainManager(){}
 
+  public boolean reset(){
+    users = new HashMap<Integer, User>();
+    polls= new HashMap<Integer, Poll>();
+    pollsid = 0;
+    usersid = 0;
+    votesid = 0;
+    voteoptionsid = 0;
+    return true;
+  }
+
   public Poll addPoll(int userid, Poll poll){
     Optional<User> cr = users.values().stream().filter(u -> u.getId()==(userid)).findAny();
     if (!cr.isPresent()){

@@ -2,6 +2,7 @@ package no.hvl.oblig11.Poll.controllers;
 
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,15 @@ import no.hvl.oblig11.Poll.models.User;
 public class UserController {
 
   @Autowired DomainManager manager;
+
+  @GetMapping("/reset")
+  public ResponseEntity<Object> reset(){
+    if (manager.reset()){
+      return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    }
+    return new ResponseEntity<>(HttpStatus.OK);
+  }
+
 
   @PostMapping("/users")
   public ResponseEntity<User> createUser(@RequestBody User user){
@@ -64,6 +74,7 @@ public class UserController {
 
   @DeleteMapping("/users/{id}")
   public ResponseEntity<User> deleteUser(@PathVariable("id") int id){
+    System.out.println("Deleting");
     User deleted = manager.removeUser(id);
     if (deleted == null){
       return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
