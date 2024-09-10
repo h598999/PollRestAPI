@@ -17,9 +17,9 @@ import no.hvl.oblig11.Poll.models.User;
  * UserControllerTest
  */
 public class UserControllerTest {
-
+  
   private RestClient client = RestClient.create();
-
+  
   @Test
   public void CreateUserTest(){
     User jonas_user = new User("JonasC", "jonasC@email.com");
@@ -38,13 +38,13 @@ public class UserControllerTest {
   
     assertTrue(retrieved_jonas.getVotes().isEmpty());
     assertTrue(retrieved_jonas.getCreatedPolls().isEmpty());
-
+  
     client.delete()
       .uri("http://localhost:8080/api/v1/users/"+retrieved_jonas.getId())
       .retrieve()
       .toEntity(User.class);
   }
-
+  
   @Test
   public void getAllUserTest(){
     User jonas_user = new User("Jonas", "jonas@email.com");
@@ -60,7 +60,7 @@ public class UserControllerTest {
       .uri("http://localhost:8080/api/v1/users")
       .retrieve()
       .toEntity(new ParameterizedTypeReference<List<User>>() {});
-   
+  
     assertTrue(allUsers.getStatusCode().equals(HttpStatus.OK));
     assertTrue(allUsers.getBody().size() == 1);
     assertTrue(allUsers.getBody().contains(retrieved_jonas));
@@ -72,9 +72,9 @@ public class UserControllerTest {
       .body(katrine_user)
       .retrieve()
       .toEntity(User.class);
-
+  
     User retrieved_katrine = response.getBody();
-
+  
     allUsers = client.get()
       .uri("http://localhost:8080/api/v1/users")
       .retrieve()
@@ -84,21 +84,21 @@ public class UserControllerTest {
     assertTrue(allUsers.getBody().size() == 2);
     assertTrue(allUsers.getBody().contains(retrieved_katrine));
     assertTrue(allUsers.getBody().contains(retrieved_jonas));
-
+  
     String jonasuri = new String("http://localhost:8080/api/v1/users/" + Integer.toString(retrieved_jonas.getId()));
     String katrineuri= new String("http://localhost:8080/api/v1/users/" + Integer.toString(retrieved_katrine.getId()));
-
+  
     client.delete()
       .uri(jonasuri)
       .retrieve()
       .toEntity(User.class);
-
+  
     client.delete()
       .uri(katrineuri)
       .retrieve()
       .toEntity(User.class);
   }
-
+  
   @Test
   public void deleteUserTest(){
     User jonas_user = new User("Jonas", "jonas@email.com");
@@ -125,7 +125,7 @@ public class UserControllerTest {
   
     assertTrue(allUsers.getBody() == null);
   }
-
+  
   @Test
   public void getUserByIdTest(){
     User jonas_user = new User("Jonas", "jonas@email.com");
@@ -150,13 +150,13 @@ public class UserControllerTest {
       .toEntity(new ParameterizedTypeReference<List<User>>() {});
   
     assertTrue(allUsers.getBody().size() == 1);
-   
+  
     client.delete()
       .uri("http://localhost:8080/api/v1/users/" + retrieved_jonas.getId())
       .retrieve()
       .toEntity(User.class);
   }
-
+  
   @Test
   public void updateUserTest(){
     User jonas_user = new User("Jonas", "jonas@email.com");
