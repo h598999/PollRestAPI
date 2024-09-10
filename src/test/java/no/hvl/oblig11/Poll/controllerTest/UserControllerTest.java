@@ -20,7 +20,6 @@ public class UserControllerTest {
 
   private RestClient client = RestClient.create();
 
-
   @Test
   public void CreateUserTest(){
     User jonas_user = new User("JonasC", "jonasC@email.com");
@@ -96,6 +95,102 @@ public class UserControllerTest {
 
     client.delete()
       .uri(katrineuri)
+      .retrieve()
+      .toEntity(User.class);
+  }
+
+  @Test
+  public void deleteUserTest(){
+    User jonas_user = new User("Jonas", "jonas@email.com");
+    ResponseEntity<User> response = client.post()
+      .uri("http://localhost:8080/api/v1/users")
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(jonas_user)
+      .retrieve()
+      .toEntity(User.class);
+    User retrieved_jonas = response.getBody();
+  
+    ResponseEntity<User> deleted_jonas = client.delete()
+      .uri("http://localhost:8080/api/v1/users/"+retrieved_jonas.getId())
+      .retrieve()
+      .toEntity(User.class);
+  
+    assertTrue(deleted_jonas.getStatusCode().equals(HttpStatus.OK));
+    assertTrue(retrieved_jonas.equals(deleted_jonas.getBody()));
+  
+    ResponseEntity<List<User>> allUsers = client.get()
+      .uri("http://localhost:8080/api/v1/users")
+      .retrieve()
+      .toEntity(new ParameterizedTypeReference<List<User>>() {});
+  
+    assertTrue(allUsers.getBody() == null);
+  }
+
+  @Test
+  public void getUserByIdTest(){
+    User jonas_user = new User("Jonas", "jonas@email.com");
+    ResponseEntity<User> response = client.post()
+      .uri("http://localhost:8080/api/v1/users")
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(jonas_user)
+      .retrieve()
+      .toEntity(User.class);
+    User retrieved_jonas = response.getBody();
+  
+    ResponseEntity<User> retrieved = client.get()
+      .uri("http://localhost:8080/api/v1/users/" + retrieved_jonas.getId())
+      .retrieve()
+      .toEntity(User.class);
+  
+    assertTrue(retrieved.getBody().equals(retrieved_jonas));
+  
+    ResponseEntity<List<User>> allUsers = client.get()
+      .uri("http://localhost:8080/api/v1/users")
+      .retrieve()
+      .toEntity(new ParameterizedTypeReference<List<User>>() {});
+  
+    assertTrue(allUsers.getBody().size() == 1);
+   
+    client.delete()
+      .uri("http://localhost:8080/api/v1/users/" + retrieved_jonas.getId())
+      .retrieve()
+      .toEntity(User.class);
+  }
+
+  @Test
+  public void updateUserTest(){
+    User jonas_user = new User("Jonas", "jonas@email.com");
+    ResponseEntity<User> response = client.post()
+      .uri("http://localhost:8080/api/v1/users")
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(jonas_user)
+      .retrieve()
+      .toEntity(User.class);
+    User retrieved_jonas = response.getBody();
+  
+    User updated_user = new User("JonasUpdated", "jonasupdated@email.com");
+    ResponseEntity<User> updated = client.put()
+      .uri("http://localhost:8080/api/v1/users/" + retrieved_jonas.getId())
+      .contentType(MediaType.APPLICATION_JSON)
+      .body(updated_user)
+      .retrieve()
+      .toEntity(User.class);
+  
+    User updated_jonas_retrieved = updated.getBody();
+  
+    assertTrue(retrieved_jonas.getId() == updated_jonas_retrieved.getId());
+    assertTrue(updated_user.getUsername().equals(updated_jonas_retrieved.getUsername()));
+    assertTrue(updated_user.getEmail().equals(updated_jonas_retrieved.getEmail()));
+  
+    ResponseEntity<List<User>> allUsers = client.get()
+      .uri("http://localhost:8080/api/v1/users")
+      .retrieve()
+      .toEntity(new ParameterizedTypeReference<List<User>>() {});
+  
+    assertTrue(allUsers.getBody().size() == 1);
+  
+    client.delete()
+      .uri("http://localhost:8080/api/v1/users/" + updated_jonas_retrieved.getId())
       .retrieve()
       .toEntity(User.class);
   }
