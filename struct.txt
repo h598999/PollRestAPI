@@ -1,0 +1,278 @@
+.
+├── build
+│   ├── classes
+│   │   └── java
+│   │       ├── main
+│   │       │   └── no
+│   │       │       └── hvl
+│   │       │           └── oblig11
+│   │       │               └── Poll
+│   │       │                   ├── controllers
+│   │       │                   └── models
+│   │       └── test
+│   │           └── no
+│   │               └── hvl
+│   │                   └── oblig11
+│   │                       └── Poll
+│   │                           ├── controllerTest
+│   │                           └── modeltest
+│   ├── generated
+│   │   └── sources
+│   │       ├── annotationProcessor
+│   │       │   └── java
+│   │       │       ├── main
+│   │       │       └── test
+│   │       └── headers
+│   │           └── java
+│   │               ├── main
+│   │               └── test
+│   ├── libs
+│   ├── reports
+│   │   └── tests
+│   │       └── test
+│   │           ├── classes
+│   │           ├── css
+│   │           ├── js
+│   │           └── packages
+│   ├── resources
+│   │   └── main
+│   │       ├── static
+│   │       └── templates
+│   ├── test-results
+│   │   └── test
+│   │       └── binary
+│   └── tmp
+│       ├── bootJar
+│       ├── compileJava
+│       │   └── compileTransaction
+│       │       ├── backup-dir
+│       │       └── stash-dir
+│       ├── compileTestJava
+│       │   └── compileTransaction
+│       │       ├── backup-dir
+│       │       └── stash-dir
+│       ├── jar
+│       └── test
+├── FrontEnd
+│   ├── node_modules
+│   │   ├── acorn
+│   │   │   ├── bin
+│   │   │   └── dist
+│   │   ├── @ampproject
+│   │   │   └── remapping
+│   │   │       └── dist
+│   │   │           └── types
+│   │   ├── aria-query
+│   │   │   └── lib
+│   │   │       ├── etc
+│   │   │       │   └── roles
+│   │   │       │       ├── abstract
+│   │   │       │       ├── dpub
+│   │   │       │       ├── graphics
+│   │   │       │       └── literal
+│   │   │       └── util
+│   │   ├── axobject-query
+│   │   │   └── lib
+│   │   │       ├── etc
+│   │   │       │   └── objects
+│   │   │       └── util
+│   │   ├── code-red
+│   │   │   ├── src
+│   │   │   │   ├── print
+│   │   │   │   └── utils
+│   │   │   └── types
+│   │   ├── css-tree
+│   │   │   ├── cjs
+│   │   │   │   ├── convertor
+│   │   │   │   ├── definition-syntax
+│   │   │   │   ├── generator
+│   │   │   │   ├── lexer
+│   │   │   │   ├── parser
+│   │   │   │   ├── syntax
+│   │   │   │   │   ├── atrule
+│   │   │   │   │   ├── config
+│   │   │   │   │   ├── function
+│   │   │   │   │   ├── node
+│   │   │   │   │   │   └── common
+│   │   │   │   │   ├── pseudo
+│   │   │   │   │   └── scope
+│   │   │   │   ├── tokenizer
+│   │   │   │   ├── utils
+│   │   │   │   └── walker
+│   │   │   ├── data
+│   │   │   ├── dist
+│   │   │   └── lib
+│   │   │       ├── convertor
+│   │   │       ├── definition-syntax
+│   │   │       ├── generator
+│   │   │       ├── lexer
+│   │   │       ├── parser
+│   │   │       ├── syntax
+│   │   │       │   ├── atrule
+│   │   │       │   ├── config
+│   │   │       │   ├── function
+│   │   │       │   ├── node
+│   │   │       │   ├── pseudo
+│   │   │       │   └── scope
+│   │   │       ├── tokenizer
+│   │   │       ├── utils
+│   │   │       └── walker
+│   │   ├── debug
+│   │   │   └── src
+│   │   ├── deepmerge
+│   │   │   └── dist
+│   │   ├── dequal
+│   │   │   ├── dist
+│   │   │   └── lite
+│   │   ├── @esbuild
+│   │   │   └── linux-x64
+│   │   │       └── bin
+│   │   ├── esbuild
+│   │   │   ├── bin
+│   │   │   └── lib
+│   │   ├── estree-walker
+│   │   │   ├── src
+│   │   │   └── types
+│   │   ├── is-reference
+│   │   │   ├── src
+│   │   │   └── types
+│   │   ├── @jridgewell
+│   │   │   ├── gen-mapping
+│   │   │   │   └── dist
+│   │   │   │       └── types
+│   │   │   ├── resolve-uri
+│   │   │   │   └── dist
+│   │   │   │       └── types
+│   │   │   ├── set-array
+│   │   │   │   └── dist
+│   │   │   │       └── types
+│   │   │   ├── sourcemap-codec
+│   │   │   │   └── dist
+│   │   │   │       └── types
+│   │   │   └── trace-mapping
+│   │   │       └── dist
+│   │   │           └── types
+│   │   ├── kleur
+│   │   ├── locate-character
+│   │   │   ├── src
+│   │   │   └── types
+│   │   ├── magic-string
+│   │   │   └── dist
+│   │   ├── mdn-data
+│   │   │   ├── api
+│   │   │   ├── css
+│   │   │   └── l10n
+│   │   ├── ms
+│   │   ├── nanoid
+│   │   │   ├── async
+│   │   │   ├── bin
+│   │   │   ├── non-secure
+│   │   │   └── url-alphabet
+│   │   ├── periscopic
+│   │   │   ├── src
+│   │   │   └── types
+│   │   ├── picocolors
+│   │   ├── postcss
+│   │   │   └── lib
+│   │   ├── @rollup
+│   │   │   └── rollup-linux-x64-gnu
+│   │   ├── rollup
+│   │   │   └── dist
+│   │   │       ├── bin
+│   │   │       ├── es
+│   │   │       │   └── shared
+│   │   │       └── shared
+│   │   ├── source-map-js
+│   │   │   └── lib
+│   │   ├── svelte
+│   │   │   ├── src
+│   │   │   │   ├── compiler
+│   │   │   │   │   ├── compile
+│   │   │   │   │   │   ├── css
+│   │   │   │   │   │   ├── nodes
+│   │   │   │   │   │   │   └── shared
+│   │   │   │   │   │   ├── render_dom
+│   │   │   │   │   │   │   └── wrappers
+│   │   │   │   │   │   │       ├── Element
+│   │   │   │   │   │   │       ├── InlineComponent
+│   │   │   │   │   │   │       └── shared
+│   │   │   │   │   │   ├── render_ssr
+│   │   │   │   │   │   │   └── handlers
+│   │   │   │   │   │   │       ├── shared
+│   │   │   │   │   │   │       └── utils
+│   │   │   │   │   │   └── utils
+│   │   │   │   │   ├── parse
+│   │   │   │   │   │   ├── read
+│   │   │   │   │   │   │   └── css-tree-cq
+│   │   │   │   │   │   │       └── node
+│   │   │   │   │   │   ├── state
+│   │   │   │   │   │   └── utils
+│   │   │   │   │   ├── preprocess
+│   │   │   │   │   └── utils
+│   │   │   │   ├── runtime
+│   │   │   │   │   ├── action
+│   │   │   │   │   ├── animate
+│   │   │   │   │   ├── easing
+│   │   │   │   │   ├── internal
+│   │   │   │   │   │   └── disclose-version
+│   │   │   │   │   ├── motion
+│   │   │   │   │   ├── store
+│   │   │   │   │   └── transition
+│   │   │   │   └── shared
+│   │   │   │       └── utils
+│   │   │   └── types
+│   │   │       └── compiler
+│   │   ├── svelte-hmr
+│   │   │   ├── lib
+│   │   │   └── runtime
+│   │   │       └── svelte-native
+│   │   ├── @sveltejs
+│   │   │   ├── vite-plugin-svelte
+│   │   │   │   ├── src
+│   │   │   │   │   ├── types
+│   │   │   │   │   └── utils
+│   │   │   │   └── types
+│   │   │   └── vite-plugin-svelte-inspector
+│   │   │       ├── src
+│   │   │       │   └── runtime
+│   │   │       └── types
+│   │   ├── @types
+│   │   │   └── estree
+│   │   ├── vite
+│   │   │   ├── bin
+│   │   │   ├── dist
+│   │   │   │   ├── client
+│   │   │   │   ├── node
+│   │   │   │   │   └── chunks
+│   │   │   │   └── node-cjs
+│   │   │   └── types
+│   │   └── vitefu
+│   │       └── src
+│   ├── public
+│   └── src
+│       ├── assets
+│       └── lib
+├── gradle
+│   └── wrapper
+└── src
+    ├── main
+    │   ├── java
+    │   │   └── no
+    │   │       └── hvl
+    │   │           └── oblig11
+    │   │               └── Poll
+    │   │                   ├── controllers
+    │   │                   └── models
+    │   └── resources
+    │       ├── static
+    │       └── templates
+    └── test
+        └── java
+            └── no
+                └── hvl
+                    └── oblig11
+                        └── Poll
+                            ├── controllerTest
+                            └── modeltest
+
+275 directories
