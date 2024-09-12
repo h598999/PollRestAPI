@@ -1,16 +1,27 @@
 <script>
-	let x = 0;
-	let y = 0;
+  import {fetchPolls} from './apiClient'
 
-	/** @param {number} value */
-	function yPlusAValue(value) {
-		return value + y;
-	}
+  let polls = [];
 
-	$: total = yPlusAValue(x);
+  async function getPolls(){
+    polls = await fetchPolls();
+    console.log(polls);
+  }
+  getPolls();
+  console.log("Hello World!")
 </script>
 
-Total: {total}
-<button on:click={() => x++}> Increment X </button>
+<h1>Hello World!</h1>
 
-<button on:click={() => y++}> Increment Y </button>
+<h2>
+ {#if polls.length > 0}
+  <ul>
+    {#each polls as poll }
+      <li>{poll.question}</li>
+      {#each poll.voteOptions as option}
+        <li> {option.caption} </li>
+      {/each}
+    {/each}
+  </ul>
+ {/if}
+</h2>
