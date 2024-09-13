@@ -3,26 +3,47 @@ import { getPollById, createVote } from './apiClient.js';
 
 export let pollId;  // pollId is passed as a prop from App.svelte
 export let currentUser;
-console.log(currentUser);
 let poll = null;
+let voteoptions = [];
 
 // Fetch poll details based on pollId
 async function loadPoll() {
   poll = await getPollById(pollId);
 }
 
-/** @param{object} voteOption **/
-async function castVote(voteOption){
+/** 
+ *@param{number} userid
+ *@param{object} voteOption 
+ **/
+async function castVote(userid, voteOption){
   try{
     const voteData = {
       selected: voteOption,
     };
-    const createdVote = await createVote(voteData);
+    const createdVote = await createVote(userid, voteData);
     console.log('Vote created successfully:', createdVote);
+    getCastedVote();
   }catch (error){
     console.error('Error creating vote:', error);
   }
 } 
+
+function getCastedVote(){
+  try{
+    let castedVote = currentUser.votes;
+    if (castedVote.length !== 0){
+      voteoptions = [];
+      castedVote.forEach((/** @type {{ selected: { id: Object; }; }} */ c) => {
+          voteoptions.push(c.selected.id);
+      });
+    } else {
+      console.log('There are no votes!');
+    }
+  } catch (error){
+    console.log(error);
+  }
+}
+getCastedVote();
 $: loadPoll();  // Re-fetch the poll whenever pollId changes
 </script>
 
@@ -31,7 +52,6 @@ $: loadPoll();  // Re-fetch the poll whenever pollId changes
     display: flex;
     justify-content: center; /* Horizontally centers the table */
     align-items: center; /* Vertically centers the table */
-    /* height: 100vh; /* Full viewport height */
     text-align: center; /* Optional: centers text within table cells */
   }
 
@@ -44,22 +64,36 @@ $: loadPoll();  // Re-fetch the poll whenever pollId changes
     padding: 8px; /* Optional: adds padding to table cells */
     border: 1px solid #ddd; /* Optional: adds border to table cells */
   }
+
+  /* New class for green border */
+  .voted-option {
+    border: 2px solid green;
+  }
 </style>
+
 {#if poll}
-<h2>Q: {poll.question}</h2>
+  <h2>Q: {poll.question}</h2>
   <div class="container">
     <table>
       <thead>
         <tr>
           <th>Options:</th>
+          <th>Number of votes:</th>
         </tr>
       </thead>
       <tbody>
         {#each poll.voteOptions as option}
-          <tr>
-            <td>{option.caption} <button on:click={() => castVote(option)}>Vote</button></td>
-            <td>Current no. of votes: {option.numberOfVotes} </td>
-          </tr>
+            {#if voteoptions.includes(option.id) }
+            <tr class={'voted-option'}>
+            <td>{option.caption}<button on:click={() => castVote(currentUser.id, option)}>Vote</button></td>
+            <td>{option.numberOfVotes} </td>
+            </tr>
+            {:else}
+            <tr>
+            <td>{option.caption}<button on:click={() => castVote(currentUser.id, option)}>Vote</button></td>
+            <td>{option.numberOfVotes} </td>
+            </tr>
+            {/if}
         {/each}
       </tbody>
     </table>
@@ -67,4 +101,3 @@ $: loadPoll();  // Re-fetch the poll whenever pollId changes
 {:else}
   <p>Loading poll details...</p>
 {/if}
-

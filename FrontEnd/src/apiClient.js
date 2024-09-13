@@ -21,10 +21,11 @@
 
   /**
   * @param{Object} voteData 
+  * @param{number} userid 
   * @returns{Promise<Object>}
   */
-  export async function createVote(voteData) {
-    const response = await fetch(baseUri + '/votes/0',{
+  export async function createVote(userid, voteData) {
+    const response = await fetch(baseUri + '/votes/' + userid,{
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -38,4 +39,22 @@
     return response.json();
   }
 
-  
+  /**
+  * @param{Object} Poll 
+  * @param{number} userid 
+  * @returns{Promise<Object>}
+  */
+  export async function createPoll(userid, Poll) {
+    const response = await fetch(baseUri + '/polls/' + userid,{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(Poll),
+    });
+    if (!response.ok){
+      const error = await response.json();
+      throw new Error(`Error creating poll: ${error.message}`);
+    }
+    return response.json();
+  }

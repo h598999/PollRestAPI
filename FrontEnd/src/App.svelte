@@ -44,6 +44,6 @@
   <!-- Pass the selectedPollId as a prop to the Poll component -->
   <Poll pollId={selectedPollId} {currentUser}/>
 {:else if currentView === 'pollCreator'}
-  <PollCreator />
+  <PollCreator {currentUser}/>
 {/if}
 
