@@ -12,6 +12,8 @@ public class VoteOption {
   private String caption;
   private Instant validUntil;
 
+  private int numberOfVotes = 0;
+
   public VoteOption(String caption, Instant validUntil){
     this.caption = caption;
     this.validUntil = validUntil;
@@ -39,6 +41,24 @@ public class VoteOption {
 
   public void setValidUntil(Instant validUntil) {
     this.validUntil = validUntil;
+  }
+
+  public int incrementNumberOfVotes() {
+    numberOfVotes++;
+    return numberOfVotes;
+  }
+
+  public int decreaseNumberOfVotes() {
+    numberOfVotes--;
+    return numberOfVotes;
+  }
+
+  public int getNumberOfVotes() {
+    return numberOfVotes;
+  }
+
+  public void setNumberOfVotes(int numberOfVotes) {
+    this.numberOfVotes = numberOfVotes;
   }
 
   @Override

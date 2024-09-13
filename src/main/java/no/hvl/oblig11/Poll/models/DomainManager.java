@@ -82,6 +82,10 @@ public class DomainManager {
   }
 
   public Poll getPollById(int id){
+    Poll poll = polls.get(id);
+    if (poll == null){
+      return null;
+    }
     return polls.get(id);
   }
 
@@ -155,27 +159,57 @@ public class DomainManager {
     return new ArrayList<User>(users.values());
   }
 
+
+  /**
+   *Creates a vote on a poll. A user can only have one single vote per poll. 
+   * If a vote by the user already exists on the poll the user is voting on, the existing vote will be removed.
+   * @param userid the id of the user casting the vote
+   * @param vote the vote to be casted
+   * @return the vote that was casted or null if the vote could not be casted
+   */
   public Vote createVote(int userid, Vote vote){
+    // Check if there exists a user with the given id
     User caster = users.get(userid);
     if (caster == null){
       System.out.println("Caster is null");
       return null;
     }
-    Optional<VoteOption> poll = polls.values().stream().flatMap(u -> u.getVoteOptions().stream())
+    // Check if the votingOption given by the vote exists in a poll
+    Optional<VoteOption> votedOption = polls.values().stream().flatMap(u -> u.getVoteOptions().stream())
       .filter(vo -> vo.getId() == vote.getSelected().getId() && vo.getCaption().equals(vote.getSelected().getCaption()))
       .findAny();
-    if (!poll.isPresent()){
+    if (!votedOption.isPresent()){
+      // If the votingOption does not exist in any poll return null and do nothing
       System.out.println("Could not find voteOption");
       return null;
     }
+    // To make sure that a user can only have one vote per Poll
+    //
+    // Find the Poll currently getting voted on
+    Optional<Poll> votingPoll = polls.values().stream().filter(p -> p.getVoteOptions().contains(votedOption.get())).findAny();
+    // Check if there exists a vote from the given user on the current poll being voted on
+    Optional<Vote> castedVote = caster.getVotes().stream()
+      .filter(v -> votingPoll.get().getVoteOptions().contains(v.getSelected()))
+      .findAny();
+    if (castedVote.isPresent()){
+      // If the user has already casted a vote on this poll then remove the vote
+      caster.getVotes().remove(castedVote.get());
+      decreaseNumberOfVotes(castedVote.get());
+    }
+    //Set the caster of the vote ** Do not think this actually matters as it is not sent through json bcs of serialization
     vote.setCaster(caster);
+    //Set the id of the vote with the kept votesid variable
     vote.setId(votesid);
+    //increment the votesid
     votesid++;
+    //Set the publishedtime of the vote to now
     vote.setPublishedAt(Instant.now());
+    //If the vote cannot be casted return null ** should never fail at this point
     if (!caster.castVote(vote)){
       System.out.println("Couldnot cast vote");
       return null;
     }
+    increaseNumberOfVotes(vote);
     return vote;
   }
 
@@ -188,6 +222,7 @@ public class DomainManager {
       return null;
     }
     Vote vote = removedvotes.get();
+    vote.getSelected().decreaseNumberOfVotes();
     // Optional<User> caster = removedvotes.forEach(removedVote -> users.values().stream()
     //     .filter(u -> u.getVotes().contains(removedVote))
     //     .findAny();
@@ -203,6 +238,7 @@ public class DomainManager {
       System.out.println("Could not remove vote");
       return null;
     }
+    decreaseNumberOfVotes(vote);
     return vote;
   }
 
@@ -234,8 +270,10 @@ public class DomainManager {
       return null;
     }
     Vote vote = found.get();
+    decreaseNumberOfVotes(vote);
     vote.setSelected(updatedvote.getSelected());
     vote.setPublishedAt(Instant.now());
+    increaseNumberOfVotes(vote);
     return vote;
   }
 
@@ -319,12 +357,32 @@ public class DomainManager {
     return updated;
 
   }
-  
+
   public HashMap<Integer, User> getUsers(){
     return this.users;
   }
   
   public HashMap<Integer, Poll> getPoll(){
     return this.polls;
+  }
+
+  private boolean increaseNumberOfVotes(Vote vote){
+    Optional<VoteOption> vo = polls.values().stream().flatMap(p -> p.getVoteOptions().stream())
+      .filter(v -> vote.getSelected().equals(v)).findAny();
+    if (!vo.isPresent()){
+      return false;
+    }
+    vo.get().incrementNumberOfVotes();
+    return true;
+  }
+
+  private boolean decreaseNumberOfVotes(Vote vote){
+    Optional<VoteOption> vo = polls.values().stream().flatMap(p -> p.getVoteOptions().stream())
+      .filter(v -> vote.getSelected().equals(v)).findAny();
+    if (!vo.isPresent()){
+      return false;
+    }
+    vo.get().decreaseNumberOfVotes();
+    return true;
   }
 }

@@ -1,27 +1,49 @@
 <script>
-  import {fetchPolls} from './apiClient'
+  import PollSelector from './PollSelector.svelte';
+  import Poll from './Poll.svelte';
+  import PollCreator from './PollCreator.svelte';
+  import { getUserById } from './apiClient'
 
-  let polls = [];
+  export let currentUser; 
+  let currentView = 'pollSelector';  
+  let selectedPollId = null;  
 
-  async function getPolls(){
-    polls = await fetchPolls();
-    console.log(polls);
+  function showPollSelector() {
+    currentView = 'pollSelector';  
+    selectedPollId = null;
   }
-  getPolls();
-  console.log("Hello World!")
+
+  function showPollCreator() {
+    currentView = 'pollCreator';  
+    selectedPollId = null;
+  }
+
+  async function setCurrentUser(){
+      currentUser = await getUserById(0);
+      console.log(currentUser);
+    }
+
+  /** @param{number} id **/
+  function showPoll(id) {
+    selectedPollId = id;
+    currentView = 'poll';
+  }
+  setCurrentUser();
+
 </script>
 
-<h1>Hello World!</h1>
+<nav>
+  <button on:click={showPollSelector}>Home</button>
+  <button on:click={showPollCreator}>Create a new Poll</button>
+</nav>
 
-<h2>
- {#if polls.length > 0}
-  <ul>
-    {#each polls as poll }
-      <li>{poll.question}</li>
-      {#each poll.voteOptions as option}
-        <li> {option.caption} </li>
-      {/each}
-    {/each}
-  </ul>
- {/if}
-</h2>
+<!-- Conditionally render views based on currentView -->
+{#if currentView === 'pollSelector'}
+  <PollSelector on:selectPoll={event => showPoll(event.detail)} {currentUser} />
+{:else if currentView === 'poll'}
+  <!-- Pass the selectedPollId as a prop to the Poll component -->
+  <Poll pollId={selectedPollId} {currentUser}/>
+{:else if currentView === 'pollCreator'}
+  <PollCreator />
+{/if}
+
