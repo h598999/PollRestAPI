@@ -40,6 +40,27 @@
   }
 
   /**
+  * @param{Object} voteData 
+  * @param{number} voteid 
+  * @returns{Promise<Object>}
+  */
+  export async function updateVote(voteid, voteData) {
+    console.log(voteid);
+    const response = await fetch(baseUri + '/votes/' + voteid,{
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(voteData),
+    });
+    if (!response.ok){
+      const error = await response.json();
+      throw new Error(`Error creating vote: ${error.message}`);
+    }
+    return response.json();
+  }
+
+  /**
   * @param{Object} Poll 
   * @param{number} userid 
   * @returns{Promise<Object>}

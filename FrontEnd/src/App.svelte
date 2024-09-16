@@ -1,6 +1,7 @@
 <script>
   import PollSelector from './PollSelector.svelte';
   import Poll from './Poll.svelte';
+  import PollTemp from './PollTemp.svelte'
   import PollCreator from './PollCreator.svelte';
   import { getUserById } from './apiClient'
 
@@ -42,7 +43,8 @@
   <PollSelector on:selectPoll={event => showPoll(event.detail)} {currentUser} />
 {:else if currentView === 'poll'}
   <!-- Pass the selectedPollId as a prop to the Poll component -->
-  <Poll pollId={selectedPollId} {currentUser}/>
+  <!-- <Poll pollId={selectedPollId} {currentUser}/> -->
+  <PollTemp pollId={selectedPollId} {currentUser} />
 {:else if currentView === 'pollCreator'}
   <PollCreator {currentUser}/>
 {/if}
